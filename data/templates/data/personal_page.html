@@ -1,0 +1,37 @@
+{% extends 'data/base.html' %}
+
+{% block style %}
+<style type="text/css">
+	.main {
+		margin: 30px 30px 30px 30px;
+	}
+	.de {
+		margin-top: 15px;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+	{% if user.is_authenticated %}
+	<div class="main">
+		<ul class="list-group">
+			{% for tournament in tournaments %}
+				<li class="list-group-item">
+					<a href={{tournament.link}}>{{tournament.name}}</a>
+				</li>
+			{% endfor %}
+		</ul>
+		<div class="de">
+			<ul class="list-group">
+				<li class="list-group-item">
+					<a href={{per_link}}>Все турниры</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	{% else %}
+	<div>
+		two
+	</div>
+	{% endif %}
+{% endblock %}

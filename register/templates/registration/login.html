@@ -1,0 +1,27 @@
+{% extends 'data/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block style %}
+<style type="text/css">
+	.main {
+		margin: 30px 30px 30px 30px;
+	}
+	.de {
+		margin-top: 15px;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+	<div class="main">
+		<form method="post" class="form-group">
+			{% csrf_token %}
+			{{form|crispy}}
+			<div class="de">
+				<button type="submit" class="btn btn-success">Войти</button>
+			</div>
+			<p>Еще нет аккаунта? <a href="/register/">Зарегистрироваться</a></p>
+		</form>
+	</div>
+{% endblock %}

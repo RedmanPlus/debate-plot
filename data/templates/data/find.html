@@ -1,0 +1,26 @@
+{% extends 'data/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block style %}
+<style type="text/css">
+	.main {
+		margin: 30px 30px 30px 30px;
+	}
+	.de {
+		margin-bottom: 15px;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main">
+	<form method="post" action="find" class="form-group">
+		{% csrf_token %}
+		<div class="input-group mb-3">
+			{{ form|crispy }}
+			<button type="submit" name="find" class="btn btn-success">Найти</button>
+		</div>
+	</form>
+</div>
+{% endblock %}
