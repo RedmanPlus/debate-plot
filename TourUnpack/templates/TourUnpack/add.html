@@ -1,0 +1,62 @@
+{% extends 'TourUnpack/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block style %}
+<style type="text/css">
+	.main {
+		margin: 30px 30px 30px 30px;
+	}
+	.de {
+		margin-bottom: 15px;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="main">
+		<h3>Добавление турнира</h3>
+		<p>Если ты видишь, что турнир не занесен в нашу базу данных - можешь добавить его тут.</p>
+		<p>Только обязательно сначала проверь, что турнира точно нет! Иначе его придется удалять ручками.</p>
+		<form method="post" class="form-group">
+			{% csrf_token %}
+			{{tour_form|crispy}}
+			<button type="submit" class="btn btn-success">Добавить</button>
+		</form>
+	</div>
+</div>
+<div class="container">
+	<div class="main">
+		<h3>Добавление тэба</h3>
+		<p>Для добавления тэба на сайт у нас есть три разных способа: загрузка напрямую из Tabbycat, загрузка файла турнира и перебивка тэба вручную. Первый вариант автоматизирован и с ним сайт справится самостоятельно. Если же вдруг подгрузка напрямую через Tabbycat не работает на какой-то конкретный турнир - у тебя есть два способа добавить его на сайт.</p>
+		<div class="accordion accordion-flush" id="accordionFlushExample">
+		  <div class="accordion-item">
+		    <h2 class="accordion-header" id="flush-headingOne">
+		      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+		        Добавить тэб через файл
+		      </button>
+		    </h2>
+		    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+		      <div class="accordion-body">
+		      	<p>Если у тебя есть файл с тэбом какого-либо турнира, то загрузи его сюда. Программа сама поймет, что и куда добавлять и обновит информацию в базе данных</p>
+		      	<p>Важно! Проверь чтобы твой файл был составлен корректно! Прочитать, как организовать файл можно тут</p>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="accordion-item">
+		    <h2 class="accordion-header" id="flush-headingTwo">
+		      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+		        Добавить тэб вручную
+		      </button>
+		    </h2>
+		    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+		      <div class="accordion-body">
+		      	<p>Если у тебя нет файла с тэбом, а автоматическая подгрузка с Tabbycat не работает, то ты можешь добавить тэб вручную тут. Сайт выдаст тебе ряд форм, которые нужно заполнить - внеси все данные, после чего отправь их на сервер.</p>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</div>
+</div>
+{% endblock %}

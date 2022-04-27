@@ -1,0 +1,39 @@
+{% extends 'TourUnpack/base.html' %}
+
+{% block style %}
+<style type="text/css">
+	.main {
+		margin: 30px 30px 30px 30px;
+	}
+	.de {
+		margin-bottom: 15px;
+	}
+	.sep {
+		margin-bottom: 40px;
+		margin-top: 40px;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main">
+	<div>
+		<h1 class="de">Центр управления сайтом</h1>
+		<h4>
+			Помогаем функционировать ДебатГрафикам
+			Добавляй турниры, обновляй данные и выполняй задачи по сайту в любом удобном порядке - список открытых задач внизу страницы
+		</h4>
+	</div>
+	<p class="sep"></p>
+	<hr class="sep">
+	<p class="sep"></p>
+	<div class="container">
+		<h3>Открытые задачи</h3>
+		<ul class="list-group">
+			<li class="list-group-item">
+				<p>будет когда-нибудь позже</p>
+			</li>
+		</ul>
+	</div>
+</div>
+{% endblock %}

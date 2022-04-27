@@ -1,14 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import User
-
 # Create your models here.
-class Tournament(models.Model):
+
+class UnsignedTournament(models.Model):
 	name = models.CharField(max_length=30)
 	date_conducted = models.DateField(auto_now=False, auto_now_add=False)
+	num_players = models.IntegerField()
+	has_tab = models.BooleanField()
 
-class PlayerTournamentRelation(models.Model):
-	toutnament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
-	player = models.ForeignKey(User, on_delete=models.CASCADE)
+class UnsignedPlayer(models.Model):
+	name = models.CharField(max_length=20)
+	surname = models.CharField(max_length=20)
+
+class UnsignedRelation(models.Model):
+	tournament = models.ForeignKey(UnsignedTournament, on_delete=models.CASCADE)
+	player = models.ForeignKey(UnsignedPlayer, on_delete=models.CASCADE)
 	r1 = models.IntegerField()
 	r2 = models.IntegerField()
 	r3 = models.IntegerField()
@@ -25,9 +31,9 @@ class PlayerTournamentRelation(models.Model):
 	r4res = models.IntegerField()
 	r5res = models.IntegerField()
 
-class OCMSLU(models.Model):
-	tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
-	player = models.ForeignKey(User, on_delete=models.CASCADE)
+class UnsignedOCMSLU(models.Model):
+	tournament = models.ForeignKey(UnsignedTournament, on_delete=models.CASCADE)
+	player = models.ForeignKey(UnsignedPlayer, on_delete=models.CASCADE)
 	r1 = models.IntegerField()
 	r2 = models.IntegerField()
 	r3 = models.IntegerField()
@@ -56,9 +62,9 @@ class OCMSLU(models.Model):
 	r8res = models.IntegerField()
 	r9res = models.IntegerField()
 
-class WeirdTournament(models.Model):
-	tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
-	player = models.ForeignKey(User, on_delete=models.CASCADE)
+class UnsignedWeirdTournament(models.Model):
+	tournament = models.ForeignKey(UnsignedTournament, on_delete=models.CASCADE)
+	player = models.ForeignKey(UnsignedPlayer, on_delete=models.CASCADE)
 	r1 = models.IntegerField()
 	r2 = models.IntegerField()
 	r3 = models.IntegerField()
