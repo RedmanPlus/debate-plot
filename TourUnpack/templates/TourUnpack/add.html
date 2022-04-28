@@ -22,7 +22,7 @@
 		<form method="post" class="form-group">
 			{% csrf_token %}
 			{{tour_form|crispy}}
-			<button type="submit" class="btn btn-success">Добавить</button>
+			<button type="submit" name="form_type" value="form_tour" class="btn btn-success">Добавить</button>
 		</form>
 	</div>
 </div>
@@ -41,6 +41,11 @@
 		      <div class="accordion-body">
 		      	<p>Если у тебя есть файл с тэбом какого-либо турнира, то загрузи его сюда. Программа сама поймет, что и куда добавлять и обновит информацию в базе данных</p>
 		      	<p>Важно! Проверь чтобы твой файл был составлен корректно! Прочитать, как организовать файл можно тут</p>
+		      	<form method="post" class="form-group">
+		      		{% csrf_token %}
+					{{tab_form|crispy}}
+					<button type="submit" name="form_type" value="form_tab" class="btn btn-success">Добавить</button>
+		      	</form>
 		      </div>
 		    </div>
 		  </div>
