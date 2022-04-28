@@ -42,11 +42,11 @@ def personal_page(response):
 
 			return render(response, "data/personal_page.html", {'tournaments': tl, 'per_link': per_link})
 
-		else:
-			u = User.objects.get(id=response.user.id)
-			per_link = f'/all/?name={u.username}'
+	else:
+		u = User.objects.get(id=response.user.id)
+		per_link = f'/all/?name={u.username}'
 
-			return render(response, "data/personal_page.html", {'tournaments': tl, 'per_link': per_link})
+		return render(response, "data/personal_page.html", {'tournaments': tl, 'per_link': per_link})
 	
 	return HttpResponseRedirect('/')
 
