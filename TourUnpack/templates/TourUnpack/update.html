@@ -1,0 +1,37 @@
+{% extends 'TourUnpack/base.html' %}
+
+{% block style %}
+<style type="text/css">
+	.main {
+		margin: 30px 30px 30px 30px;
+	}
+	.de {
+		margin-bottom: 15px;
+	}
+	.sep {
+		margin-bottom: 40px;
+		margin-top: 40px;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main">
+	<div>
+		<h1 class="de">Связка тэбов</h1>
+	</div>
+	<p class="sep"></p>
+	<hr class="sep">
+	<p class="sep"></p>
+	<div class="container">
+		<ul class="list-group">
+			{% for t in t_list %}
+			<li class="list-group-item">
+				<p>{{t}}</p>
+			</li>
+			{% endfor %}
+		</ul>
+		<a href="update/">Обновить турниры</a>
+	</div>
+</div>
+{% endblock %}
