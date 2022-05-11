@@ -5,7 +5,7 @@ from bokeh.layouts import layout
 from bokeh.embed import components
 from bokeh.models import HoverTool, DatetimeTickFormatter, NumeralTickFormatter, Panel, Tabs, Div
 from django.contrib.auth.models import User
-from .models import Tournament, WeirdTournament, PlayerTournamentRelation
+from .models import Tournament, WeirdTournament, PlayerTournamentRelation, CastratedRelation
 
 # builds a plot for an individual tournament
 
@@ -19,10 +19,28 @@ def plotbuilder(name, tournament):
 		y1 = [int(points.r1), int(points.r2), int(points.r3), int(points.r4), int(points.r5)]
 
 	except:
-		points = WeirdTournament.objects.get(tournament_id=tour.id, player_id=u.id)
-		x = [1, 2, 3, 4, 5, 6]
-		y1 = [int(points.r1), int(points.r2), int(points.r3), int(points.r4), int(points.r5), int(points.r6)]
-	
+
+		try:
+			points = WeirdTournament.objects.get(tournament_id=tour.id, player_id=u.id)
+			x = [1, 2, 3, 4, 5, 6]
+			y1 = [int(points.r1), int(points.r2), int(points.r3), int(points.r4), int(points.r5), int(points.r6)]
+		except:
+			div = 'Тэб для этого турнира записан в базе данных не полностью'
+			script = 'и к сожалению, у нас есть только общие данные о среднем спикерском и стандартном отклонении'
+			points = CastratedRelation.objects.get(tournament_id=tour.id, player_id=u.id)
+			avg = points.avg_res
+			med = 'Данных недостаточно для вычисления медианного значения'
+			st_dev = points.stdev_res
+
+			return_dict = {
+				'div': div,
+				'script': script,
+				'avg': avg,
+				'med': med,
+				'st_dev': st_dev
+			}
+
+			return return_dict
 
 	p = figure(
 		y_range=(65, 85),
@@ -66,11 +84,15 @@ def massiveplotbuilder(name):
 	u = User.objects.get(username=name)
 	tours = PlayerTournamentRelation.objects.filter(player_id=u.id)
 	weird_tours = WeirdTournament.objects.filter(player_id=u.id)
+	cast_tours = CastratedRelation.objects.filter(player_id=u.id)
 
 	x_ax = []
+	x_c_ax = []
 	y_ax = []
+	y_c_ax = []
 	y_med_ax = []
 	y_stdev_ax = []
+	y_c_stdev_ax = []
 
 	x_pos_ax = [1,2,3,4]
 	y_res_sum = [0, 0, 0, 0]
@@ -92,11 +114,11 @@ def massiveplotbuilder(name):
 		res_list = [tour.r1res, tour.r2res, tour.r3res, tour.r4res, tour.r5res]
 		pos_list = [tour.r1pos, tour.r2pos, tour.r3pos, tour.r4pos, tour.r5pos]
 
-		y_points_ax[tour.r1 - 66] += 1
-		y_points_ax[tour.r2 - 66] += 1
-		y_points_ax[tour.r3 - 66] += 1
-		y_points_ax[tour.r4 - 66] += 1
-		y_points_ax[tour.r5 - 66] += 1
+		y_points_ax[tour.r1 - 65] += 1
+		y_points_ax[tour.r2 - 65] += 1
+		y_points_ax[tour.r3 - 65] += 1
+		y_points_ax[tour.r4 - 65] += 1
+		y_points_ax[tour.r5 - 65] += 1
 
 		for res, pos in zip(res_list, pos_list):
 			if pos == "No":
@@ -116,6 +138,7 @@ def massiveplotbuilder(name):
 					y_res_count[3] += 1
 
 		x_ax.append(datetime.combine(x.date_conducted, datetime.min.time()))
+		x_c_ax.append(datetime.combine(x.date_conducted, datetime.min.time()))
 		y_ax.append(y_avg)
 		y_med_ax.append(y_med)
 		y_stdev_ax.append(y_stdev)
@@ -158,11 +181,36 @@ def massiveplotbuilder(name):
 					y_res_count[3] += 1
 
 		x_ax.append(datetime.combine(x.date_conducted, datetime.min.time()))
+		x_c_ax.append(datetime.combine(x.date_conducted, datetime.min.time()))
 		y_ax.append(y_avg)
 		y_med_ax.append(y_med)
 		y_stdev_ax.append(y_stdev)
 
-	x_ax = sorted(x_ax)
+	for c_tour in cast_tours:
+		x = Tournament.objects.get(id=c_tour.tournament_id)
+
+		y_avg = c_tour.avg_res
+		y_stdev = round(c_tour.stdev_res, 2)
+
+		x_ax.append(datetime.combine(x.date_conducted, datetime.min.time()))
+		y_ax.append(y_avg)
+		y_stdev_ax.append(y_stdev)
+
+	n = len(x_ax)
+	n1 = len(x_c_ax)
+
+	for i in range(n):
+		for j in range(0, n-1):
+			if x_ax[j] > x_ax[j + 1]:
+				x_ax[j], x_ax[j + 1] = x_ax[j + 1], x_ax[j]
+				y_ax[j], y_ax[j + 1] = y_ax[j + 1], y_ax[j]		
+				y_stdev_ax[j], y_stdev_ax[j + 1] = y_stdev_ax[j + 1], y_stdev_ax[j]
+
+	for l in range(n1):
+		for c in range(0, n1-1):
+			if x_c_ax[c] > x_c_ax[c + 1]:
+				x_c_ax[c], x_c_ax[c + 1] = x_c_ax[c + 1], x_c_ax[c]
+				y_med_ax[c], y_med_ax[c + 1] = y_med_ax[c + 1], y_med_ax[c]
 
 # general average plot
 
@@ -210,8 +258,8 @@ def massiveplotbuilder(name):
 	p_med.title.align = "center"
 	p_med.title.text_color = "black"
 
-	p_med.line(x_ax, y_med_ax, color='blue', line_width=3)
-	p_med.circle(x_ax, y_med_ax, color='blue', size=10)
+	p_med.line(x_c_ax, y_med_ax, color='blue', line_width=3)
+	p_med.circle(x_c_ax, y_med_ax, color='blue', size=10)
 
 	p_med.yaxis[0].formatter = NumeralTickFormatter(format="00.00")
 	p_med.xaxis[0].formatter = DatetimeTickFormatter(months="%b %Y")

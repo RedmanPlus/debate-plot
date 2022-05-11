@@ -27,3 +27,7 @@ class PlayerTournamentForm(forms.Form):
 	r5 = forms.IntegerField()
 	r5pos = forms.CharField(max_length=2)
 	r5res = forms.IntegerField()
+
+class ApiForm(forms.Form):
+	name = forms.CharField(max_length=30)
+	link = forms.CharField()

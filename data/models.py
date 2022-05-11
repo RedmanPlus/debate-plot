@@ -77,3 +77,16 @@ class WeirdTournament(models.Model):
 	r4res = models.IntegerField()
 	r5res = models.IntegerField()
 	r6res = models.IntegerField()
+
+class CastratedRelation(models.Model):
+	tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
+	player = models.ForeignKey(User, on_delete=models.CASCADE)
+	avg_res = models.FloatField()
+	stdev_res = models.FloatField()
+	firsts = models.IntegerField()
+	seconds = models.IntegerField()
+	r1pos = models.CharField(max_length=2)
+	r2pos = models.CharField(max_length=2)
+	r3pos = models.CharField(max_length=2)
+	r4pos = models.CharField(max_length=2)
+	r5pos = models.CharField(max_length=2)
